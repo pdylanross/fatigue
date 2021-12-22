@@ -44,14 +44,6 @@ jobs:
           tag_name: ${{ env.REVISION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-      - uses: actions-rs/install@v0.1
-        with:
-          crate: cargo-edit
-          version: 0.8.0
       - run: cargo set-version ${{ env.REVISION }} --workspace
       - uses: katyo/publish-crates@v1
         with:

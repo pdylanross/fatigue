@@ -2,7 +2,12 @@
 name = "libfatigue"
 version = "0.0.1"
 authors = ["Dylan Ross <pdylanross@gmail.com>"]
+description = "an extensible load testing library"
 edition = "2018"
+readme = "README.md"
+homepage = "https://github.com/pdylanross/fatigue"
+repository = "https://github.com/pdylanross/fatigue"
+license = "Apache-2.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
