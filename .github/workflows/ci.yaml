@@ -1,0 +1,37 @@
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+name: CI
+
+jobs:
+  build_and_test:
+    if: |
+      !contains(toJSON(github.event.commits.*.message), '[skip-ci]')
+    name: CI
+    runs-on: ${{ matrix.os }}
+    env:
+      RUST_BACKTRACE: 1
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+        toolchain: [stable]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: Swatinem/rust-cache@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{matrix.toolchain}}
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --all-features
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --all-targets
