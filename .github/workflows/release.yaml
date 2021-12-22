@@ -14,7 +14,7 @@ jobs:
     if: |
       !contains(toJSON(github.event.commits.*.message), '[skip-ci]')
     runs-on: ubuntu-latest
-    name: "Bump version and create changelog with commitizen"
+    name: Release
     steps:
       - name: Check out
         uses: actions/checkout@v2
@@ -41,8 +41,8 @@ jobs:
           override: true
       - uses: actions-rs/install@v0.1
         with:
-          crate: cargo-sort
-          version: latest
+          crate: cargo-edit
+          version: 0.8.0
       - run: cargo set-version ${{ env.REVISION }} --workspace
       - uses: katyo/publish-crates@v1
         with:
