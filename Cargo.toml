@@ -3,3 +3,7 @@ members = [
     "fatigue",
     "libfatigue"
 ]
+
+exclude = [
+    "examples/test-api/test-api"
+]

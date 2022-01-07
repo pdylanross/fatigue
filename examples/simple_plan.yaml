@@ -1,0 +1,71 @@
+run:
+  base_url: http://localhost:8000
+  concurrency: 2
+  duration:
+    timed:
+      duration: 20s
+      warm_up: 1s
+      iterations: 1
+static_context:
+  - type: literal
+    name: users
+    properties:
+      names:
+        - bob
+        - john
+      ages:
+        - 1
+        - 2
+  - type: literal
+    name: statuses
+    properties:
+      - 404
+      - 200
+      - 201
+      - 202
+      - 400
+      - 502
+actions:
+  - type: request
+    properties:
+      path: /ping
+  - type: request
+    name: say hello
+    properties:
+      path: |
+        {% for name in users.names %}
+          {% for age in users.ages %}
+            /hello/{{name}}/{{age}}
+          {% endfor %}
+        {% endfor %}
+  - type: request
+    name: custom status
+    properties:
+      path: |
+        {% for status in statuses %}
+            /status/{{status}}
+        {% endfor %}
+  - type: request
+    name: get list items
+    properties:
+      path: /list
+      response_context_key: items
+  - type: request
+    name: get item
+    properties:
+      path: |
+        {% for id in items %}
+            /list/{{id}}
+        {% endfor %}
+  - type: request
+    name: create item
+    properties:
+      path: /list
+      method: POST
+      body: |
+        {
+          "id": "{{items[0]}}",
+          "data": "{{items[0]}}"
+        }
+#  - type: print_context
+#    properties: {}
