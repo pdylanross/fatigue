@@ -42,6 +42,7 @@ pub enum FatigueTestError {
     NoRuntime(#[from] tokio::runtime::TryCurrentError),
 }
 
+#[derive(Default)]
 pub struct TestRunSettings {
     /// If none, assume that the async runtime is setup already
     /// otherwise this will describe how to setup a tokio RT
@@ -49,25 +50,9 @@ pub struct TestRunSettings {
     pub watch_settings: Option<TestRunWatchSettings>,
 }
 
-impl Default for TestRunSettings {
-    fn default() -> Self {
-        TestRunSettings {
-            async_settings: None,
-            watch_settings: None,
-        }
-    }
-}
-
+#[derive(Default)]
 pub struct TestRunAsyncSettings {
     pub thread_type: TestRunThreadType,
-}
-
-impl Default for TestRunAsyncSettings {
-    fn default() -> Self {
-        TestRunAsyncSettings {
-            thread_type: TestRunThreadType::default(),
-        }
-    }
 }
 
 pub enum TestRunThreadType {
@@ -83,14 +68,9 @@ impl Default for TestRunThreadType {
     }
 }
 
+#[derive(Default)]
 pub struct TestRunWatchSettings {
     pub result_watch: Option<watch::Sender<TestResult>>,
-}
-
-impl Default for TestRunWatchSettings {
-    fn default() -> Self {
-        TestRunWatchSettings { result_watch: None }
-    }
 }
 
 impl FatigueTester {
@@ -135,20 +115,11 @@ impl FatigueTester {
     }
 }
 
+#[derive(Default)]
 pub struct FatigueTesterBuilder {
     action_factory: ActionFactory,
     context_action_factory: ContextActionFactory,
     config: Option<FatigueTesterConfig>,
-}
-
-impl Default for FatigueTesterBuilder {
-    fn default() -> Self {
-        FatigueTesterBuilder {
-            action_factory: ActionFactory::default(),
-            context_action_factory: ContextActionFactory::default(),
-            config: None,
-        }
-    }
 }
 
 #[derive(Debug, Error)]
@@ -197,8 +168,10 @@ impl FatigueTesterBuilder {
         config_str: S,
     ) -> Result<FatigueTesterBuilder, FatigueTesterBuilderError> {
         let config: FatigueTesterConfig = serde_yaml::from_str(config_str.as_ref())?;
-        let mut builder = FatigueTesterBuilder::default();
-        builder.config = Some(config);
+        let builder = FatigueTesterBuilder {
+            config: Some(config),
+            ..Default::default()
+        };
         Ok(builder)
     }
 

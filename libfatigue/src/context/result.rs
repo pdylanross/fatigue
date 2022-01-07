@@ -115,7 +115,7 @@ impl TestResultBuilderInner {
             .expect("category must exist");
 
         if !timing_category.contains_key(status_code) {
-            timing_category.insert(status_code.clone(), Histogram::<u64>::new(2).unwrap());
+            timing_category.insert(*status_code, Histogram::<u64>::new(2).unwrap());
         }
 
         let timings_log = timing_category

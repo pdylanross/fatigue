@@ -56,7 +56,7 @@ impl InternalAction {
             Some(n) => n,
             None => internal
                 .suggest_default_name()
-                .unwrap_or(rand_action_name()),
+                .unwrap_or_else(rand_action_name),
         };
         let name = Arc::new(name);
 

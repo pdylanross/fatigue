@@ -8,6 +8,7 @@ use crate::context::{
 use crate::FatigueTesterRunInformation;
 use std::collections::HashMap;
 
+#[derive(Default)]
 pub struct ActionFactory {
     builders: HashMap<&'static str, Box<dyn ActionBuilder>>,
 }
@@ -20,14 +21,6 @@ pub enum ActionFactoryError {
     ActionTypeNotFound(String),
     #[error("action builder error: `{0}`")]
     ActionBuilderError(#[from] ActionBuilderError),
-}
-
-impl Default for ActionFactory {
-    fn default() -> Self {
-        ActionFactory {
-            builders: HashMap::new(),
-        }
-    }
 }
 
 impl ActionFactory {
@@ -77,6 +70,7 @@ impl ActionFactory {
     }
 }
 
+#[derive(Default)]
 pub struct ContextActionFactory {
     builders: HashMap<&'static str, Box<dyn StaticContextActionBuilder>>,
 }
@@ -89,14 +83,6 @@ pub enum ContextActionFactoryError {
     StaticContextActionTypeNotFound(String),
     #[error("context action builder error: `{0}`")]
     StaticContextActionBuilderError(#[from] StaticContextActionBuilderError),
-}
-
-impl Default for ContextActionFactory {
-    fn default() -> Self {
-        ContextActionFactory {
-            builders: HashMap::new(),
-        }
-    }
 }
 
 impl ContextActionFactory {

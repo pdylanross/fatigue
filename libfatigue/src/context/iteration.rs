@@ -96,10 +96,7 @@ struct WarmUpTrackerInner {
 
 impl WarmUpTracker {
     fn new(until: Option<Duration>) -> Self {
-        let inner = match until {
-            None => None,
-            Some(d) => Some(WarmUpTrackerInner::new(d)),
-        };
+        let inner = until.map(WarmUpTrackerInner::new);
         let inner = RwLock::new(inner);
         WarmUpTracker { inner }
     }
@@ -121,7 +118,7 @@ impl WarmUpTracker {
         }
         {
             let mut guard = self.inner.write().unwrap();
-            return match &*guard {
+            match &*guard {
                 None => true,
                 Some(inner) => {
                     let inner_res = inner.is_done();
@@ -132,7 +129,7 @@ impl WarmUpTracker {
                         true
                     }
                 }
-            };
+            }
         }
     }
 }

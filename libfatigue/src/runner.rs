@@ -1,6 +1,6 @@
 use crate::context::IterationResult;
 use crate::{FatigueTestError, InternalAction, TestResult, TestRunContext, TestRunSettings};
-use futures::channel::mpsc::{channel, Receiver, SendError, Sender};
+use futures::channel::mpsc::{channel, Receiver, Sender};
 use futures::future::join_all;
 use futures::{SinkExt, StreamExt};
 use std::sync::Arc;
@@ -102,7 +102,7 @@ fn start_test_run_watch_handler(
             let send_res = sender.send(results);
 
             // todo: probably handle this better?
-            if let Err(_) = send_res {
+            if send_res.is_err() {
                 return;
             }
 
@@ -154,11 +154,8 @@ impl TestRunWorker {
                 Err(err) => IterationResult::ContextError { err },
             };
 
-            match self.iteration_tx.feed(iteration_result).await {
-                Ok(_) => {}
-                Err(e) => match e {
-                    SendError { .. } => return,
-                },
+            if self.iteration_tx.feed(iteration_result).await.is_err() {
+                return;
             }
         }
     }

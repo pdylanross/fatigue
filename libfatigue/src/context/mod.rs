@@ -146,7 +146,7 @@ impl TestRunContext {
         let result_builder = Arc::new(TestResultBuilder::new());
         let static_contexts: DashMap<String, StaticContextTracker> = context_actions
             .iter()
-            .map(|a| a.clone())
+            .cloned()
             .map(|a| StaticContextTracker::new(a))
             .map(|a| (a.action.get_name().to_string(), a))
             .collect();
