@@ -25,6 +25,7 @@ jobs:
         with:
           toolchain: stable
           override: true
+      - uses: Swatinem/rust-cache@v1
       - uses: actions-rs/install@v0.1
         with:
           crate: cargo-edit
@@ -39,6 +40,7 @@ jobs:
           branch: main
           commit: false
       - run: cargo set-version ${{ env.REVISION }} --workspace
+      - run: cargo upgrade libfatigue@${{ env.REVISION }} --workspace
       - run: sudo chmod -R ugo+rwX .
       - uses: EndBug/add-and-commit@v7
         with:
