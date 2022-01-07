@@ -39,7 +39,8 @@ jobs:
           branch: main
           commit: false
       - run: cargo set-version ${{ env.REVISION }} --workspace
-      - uses: EndBug/add-and-commit@v7 # You can change this to use a specific version.
+      - run: sudo chmod -R ugo+rwX .
+      - uses: EndBug/add-and-commit@v7
         with:
           message: "[skip-ci] Release ${{ env.REVISION }}"
           push: true
