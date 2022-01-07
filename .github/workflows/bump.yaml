@@ -21,6 +21,8 @@ jobs:
           token: "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
           fetch-depth: 0
       - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
       - uses: Swatinem/rust-cache@v1
       - uses: actions-rs/install@v0.1
         with:
