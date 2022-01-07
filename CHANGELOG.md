@@ -1,3 +1,11 @@
+## 0.2.2 (2022-01-07)
+
+
+- fix: added docs to a few methods
+- ci: the thing was over there
+- [skip-ci] Release 0.2.1
+- ci: use dashless skipci tag
+
 ## 0.2.1 (2022-01-07)
 
 
