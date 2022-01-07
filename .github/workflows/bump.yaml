@@ -3,7 +3,7 @@ name: Version Bump
 on:
   workflow_run:
     workflows:
-      - CI
+      - Continuous Integration
     branches:
       - main
     types:
@@ -11,8 +11,7 @@ on:
 
 jobs:
   release:
-    if: |
-      !contains(toJSON(github.event.commits.*.message), '[skip-ci]')
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     name: Release
     steps:
@@ -22,9 +21,6 @@ jobs:
           token: "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
           fetch-depth: 0
       - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
       - uses: Swatinem/rust-cache@v1
       - uses: actions-rs/install@v0.1
         with:

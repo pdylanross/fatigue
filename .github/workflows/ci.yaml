@@ -1,3 +1,5 @@
+name: Continuous Integration
+
 on:
   pull_request:
     branches:
@@ -5,8 +7,6 @@ on:
   push:
     branches:
       - main
-
-name: CI
 
 jobs:
   build_and_test:
@@ -35,3 +35,33 @@ jobs:
         with:
           command: test
           args: --all-targets
+  check_commits:
+    runs-on: ubuntu-latest
+    name: Lint commit messages
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install CZ
+        run: sudo pip3 install -U Commitizen
+      - name: Cz Check
+        run: cz check --rev-range ${{github.event.pull_request.base.sha}}..${{ github.event.pull_request.head.sha }}
+  cargo_sort:
+    runs-on: ubuntu-latest
+    name: Cargo sort check
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v1
+      - uses: actions-rs/install@v0.1
+        with:
+          crate: cargo-sort
+          version: latest
+      - run: cargo sort -c
+      - uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --no-deps

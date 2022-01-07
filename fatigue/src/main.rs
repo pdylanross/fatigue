@@ -65,10 +65,12 @@ async fn execute_command<'a, 'b>(app: App<'a, 'b>) -> Result<(), AppError> {
 
     let (watch_tx, watch_rx) = watch::channel(Default::default());
 
-    let mut test_settings = TestRunSettings::default();
-    test_settings.watch_settings = Some(TestRunWatchSettings {
-        result_watch: Some(watch_tx),
-    });
+    let test_settings = TestRunSettings {
+        watch_settings: Some(TestRunWatchSettings {
+            result_watch: Some(watch_tx),
+        }),
+        ..Default::default()
+    };
 
     let output_formatter = Arc::new(get_output_formatter());
     let is_done = Arc::new(AtomicBool::new(false));
