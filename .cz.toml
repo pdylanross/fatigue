@@ -1,5 +1,23 @@
 [tool.commitizen]
 bump_message = "release $current_version → $new_version [skip-ci]"
-name = "cz_conventional_commits"
+name = "cz_customize"
+tag_format = "$major.$minor.$patch"
 version = "0.2.0"
-tag_format = "$version"
+[tool.commitizen.customize]
+bump_map = {feat = "PATCH", break = "MINOR", fix = "PATCH"}
+bump_pattern = "^(feat|fix|break)"
+example = "feat: this feature enable customize through config file"
+message_template = "{{change_type}}: {{message}}"
+schema = "<type>: <body>"
+schema_pattern = "(feat|fix):(\\s.*)"
+
+[[tool.commitizen.customize.questions]]
+choices = ["feat", "fix", "doc", "ci", "break", "doc"] # short version
+message = "Select the type of change you are committing"
+name = "change_type"
+type = "list"
+
+[[tool.commitizen.customize.questions]]
+message = "Body."
+name = "message"
+type = "input"
