@@ -1,3 +1,14 @@
+## 0.2.1 (2022-01-07)
+
+
+- ci: missed toolchain in bump
+- fix: addressed clippy warnings
+- ci: added toolchain back
+- ci: added lint to main ci action
+- ci: separate cargo releases from version bumping to allow for ci/doc commits to not fail actions
+- ci: update cz rules for pre-1.0
+- ci: update cz toml version format
+
 ## v0.2.0 (2022-01-07)
 
 ## v0.1.0 (2022-01-07)
