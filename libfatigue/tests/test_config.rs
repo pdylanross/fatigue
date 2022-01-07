@@ -42,7 +42,7 @@ actions:
             warm_up,
             iterations,
         } => {
-            assert_eq!(0, warm_up);
+            assert_eq!(None, warm_up);
             assert_eq!(5000, iterations)
         }
         _ => {
