@@ -54,6 +54,7 @@ impl ActionBuilder for DelayActionBuilder {
     }
 }
 
+/// create a new delay action builder
 pub fn new_builder() -> Box<dyn ActionBuilder> {
     Box::new(DelayActionBuilder {})
 }

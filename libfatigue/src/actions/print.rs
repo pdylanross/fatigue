@@ -38,6 +38,7 @@ impl ActionBuilder for PrintContextActionBuilder {
     }
 }
 
+/// create a new print_context action builder
 pub fn new_builder() -> Box<dyn ActionBuilder> {
     Box::new(PrintContextActionBuilder {})
 }

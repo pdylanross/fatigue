@@ -8,6 +8,7 @@ use reqwest::{Client, Method, Url};
 use serde_yaml::Value;
 use std::time::Instant;
 
+/// create a new request action builder
 pub fn new_builder() -> Box<dyn ActionBuilder> {
     Box::new(RequestActionBuilder {})
 }
