@@ -256,7 +256,8 @@ mod tests {
                 iterations: 5000
     actions:
         - type: request
-          properties: {}
+          properties:
+            path: /
         "#,
         )
         .unwrap();
