@@ -1,6 +1,6 @@
 [package]
 name = "fatigue"
-version = "0.0.3"
+version = "0.1.0"
 authors = ["Dylan Ross <pdylanross@gmail.com>"]
 edition = "2018"
 description = "an extensible load testing tool"
