@@ -8,7 +8,6 @@ readme = "README.md"
 homepage = "https://github.com/pdylanross/fatigue"
 repository = "https://github.com/pdylanross/fatigue"
 license = "Apache-2.0"
-
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
@@ -20,8 +19,8 @@ humantime-serde = "1.0.1"
 liquid = "0.23.1"
 num_cpus = "1.13.1"
 petname = "1.1.2"
-reqwest = {version = "0.11.8", features=["json"]}
-serde = {version = "1.0.132", features=["derive"]}
+reqwest = { version = "0.11.8", features = ["json"] }
+serde = { version = "1.0.132", features = ["derive"] }
 serde_yaml = "0.8.23"
 thiserror = "1.0.30"
 tokio = { version = "1.15.0", features = ["full"] }
