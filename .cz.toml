@@ -1,5 +1,5 @@
 [tool.commitizen]
-bump_message = "release $current_version → $new_version [skip-ci]"
+bump_message = "release $current_version → $new_version [skip ci]"
 name = "cz_customize"
 tag_format = "$major.$minor.$patch"
 version = "0.2.1"

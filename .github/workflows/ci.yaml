@@ -10,8 +10,6 @@ on:
 
 jobs:
   build_and_test:
-    if: |
-      !contains(toJSON(github.event.commits.*.message), '[skip-ci]')
     name: Build and Test
     runs-on: ${{ matrix.os }}
     env:
