@@ -1,3 +1,9 @@
+## 0.2.4 (2022-01-08)
+
+
+- chore: merge main
+- fix: fixed release-crate job
+
 ## 0.2.3 (2022-01-08)
 
 

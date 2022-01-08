@@ -2,7 +2,7 @@
 bump_message = "release $current_version → $new_version [skip ci]"
 name = "cz_customize"
 tag_format = "$major.$minor.$patch"
-version = "0.2.3"
+version = "0.2.4"
 [tool.commitizen.customize]
 bump_map = {feat = "PATCH", break = "MINOR", fix = "PATCH"}
 bump_pattern = "^(feat|fix|break)"
