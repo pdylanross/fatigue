@@ -32,9 +32,9 @@ struct PrettyInner {
 impl PrettyOutputFormatter {
     pub fn new() -> Self {
         let mut out = stdout();
-        out.execute(Clear(ClearType::All))
-            .expect("todo: result handling");
         out.execute(Hide).expect("todo: result handling");
+        out.queue(Clear(ClearType::All))
+            .expect("todo: result handling");
         let cyan = Style::new().cyan();
         let blue = Style::new().blue();
         let red = Style::new().red();
@@ -61,6 +61,7 @@ impl OutputFormatter for PrettyOutputFormatter {
 
     fn write_final_results(&self, result: TestResult) {
         let mut guard = self.inner.lock().unwrap();
+        guard.clear();
         guard.write(&result);
     }
 
@@ -72,13 +73,19 @@ impl OutputFormatter for PrettyOutputFormatter {
 }
 
 impl PrettyInner {
-    fn write(&mut self, val: &TestResult) {
+    fn clear(&mut self) {
         self.out.queue(MoveTo(0, 0)).expect("todo: result handling");
         self.out
-            .queue(Clear(ClearType::All))
+            .queue(Clear(ClearType::FromCursorDown))
             .expect("todo: result handling");
-        self.display_status_row(val);
+    }
+    fn write(&mut self, val: &TestResult) {
+        self.out.queue(MoveTo(0, 0)).expect("todo: result handling");
 
+        self.display_status_row(val);
+        self.out
+            .queue(Clear(ClearType::FromCursorDown))
+            .expect("todo: result handling");
         let table = self.build_output_table(val);
         self.out.queue(Print(table)).expect("todo: result handling");
         self.out.flush().expect("todo: result handling");
@@ -112,7 +119,6 @@ impl PrettyInner {
         };
         let mut remaining = Cell::new(remaining.as_str());
         remaining.align(Alignment::RIGHT);
-        let remaining = remaining.with_hspan(20);
 
         let mut table = Table::new();
         table.set_format(*FORMAT_CLEAN);

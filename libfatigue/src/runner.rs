@@ -108,7 +108,7 @@ fn start_test_run_watch_handler(
                 return;
             }
 
-            time::sleep(Duration::from_millis(500)).await;
+            time::sleep(Duration::from_millis(200)).await;
         }
     })
 }

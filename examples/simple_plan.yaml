@@ -5,7 +5,7 @@ run:
     timed:
       duration: 2m
       warm_up: 1s
-      iterations: 1
+      iterations: 10000
 static_context:
   - type: literal
     name: users
