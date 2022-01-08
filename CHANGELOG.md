@@ -1,3 +1,8 @@
+## 0.2.3 (2022-01-08)
+
+
+- fix: fixed a few non-async locks that should've been async
+
 ## 0.2.2 (2022-01-07)
 
 
