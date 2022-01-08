@@ -53,6 +53,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: katyo/publish-crates@v1
-        if: ${{ steps.add-and-commit.outputs.committed }}
+        if: ${{ success() && steps.add-and-commit.outputs.committed == 'true' }}
         with:
           registry-token: ${{ secrets.CARGO_REGISTRY_TOKEN }}

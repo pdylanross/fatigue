@@ -11,7 +11,7 @@
 [docs-badge]: https://img.shields.io/docsrs/libfatigue
 [docs-url]: https://docs.rs/libfatigue/latest/libfatigue/
 [crates-badge]: https://img.shields.io/crates/v/libfatigue.svg
-[crates-url]: https://crates.io/crates/tokio
+[crates-url]: https://crates.io/crates/libfatigue
 [license-badge]: https://img.shields.io/crates/l/libfatigue
 [license-url]: https://github.com/pdylanross/fatigue/blob/main/LICENSE
 
