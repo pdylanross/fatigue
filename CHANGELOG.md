@@ -1,3 +1,8 @@
+## 0.2.5 (2022-01-08)
+
+
+- feat: calculate and display requests per second
+
 ## 0.2.4 (2022-01-08)
 
 
