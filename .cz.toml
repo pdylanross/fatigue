@@ -12,7 +12,7 @@ schema = "<type>: <body>"
 schema_pattern = "(feat|fix):(\\s.*)"
 
 [[tool.commitizen.customize.questions]]
-choices = ["feat", "fix", "doc", "ci", "break", "doc"] # short version
+choices = ["feat", "fix", "doc", "ci", "break", "doc", "chore"] # short version
 message = "Select the type of change you are committing"
 name = "change_type"
 type = "list"

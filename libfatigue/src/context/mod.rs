@@ -8,6 +8,7 @@ use hdrhistogram::Histogram;
 use liquid::model::{to_value, Value};
 use std::collections::HashMap;
 use std::sync::Arc;
+use std::time::Duration;
 use tokio::sync::RwLock;
 
 pub mod actions;
@@ -87,6 +88,14 @@ pub(crate) enum IterationResult {
 #[derive(Serialize, Debug, Default, Clone)]
 pub struct TestResult {
     pub timings: HashMap<String, HashMap<String, TestResultTimingLogItem>>,
+    pub requests_per_second: f64,
+    pub duration: Option<TestDurationStatus>,
+}
+
+#[derive(Serialize, Debug, Clone)]
+pub enum TestDurationStatus {
+    Iteration { until: u64, current: u64 },
+    Timed { remaining: Duration },
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -185,6 +194,9 @@ impl TestRunContext {
     pub(crate) async fn get_test_results(&self) -> TestResult {
         self.result_builder.build().await
     }
+    pub(crate) fn get_duration_status(&self) -> TestDurationStatus {
+        self.duration_tracker.get_status()
+    }
 
     pub(crate) fn _mark_exit(&self) {
         self.duration_tracker.mark_exit()
@@ -239,6 +251,7 @@ pub(crate) trait TestDurationTracker {
     fn mark_exit(&self);
     fn is_done(&self) -> bool;
     async fn should_track_iteration(&self) -> bool;
+    fn get_status(&self) -> TestDurationStatus;
 }
 
 fn get_duration_tracker(

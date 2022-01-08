@@ -6,6 +6,7 @@ use reqwest::StatusCode;
 use std::collections::HashMap;
 use std::time::Duration;
 use tokio::sync::Mutex;
+use tokio::time::Instant;
 
 pub(crate) struct TestResultBuilder {
     inner: Mutex<TestResultBuilderInner>,
@@ -45,30 +46,23 @@ impl TestResultBuilder {
     }
 }
 
-struct TestResultLogItem {
-    _actions: Vec<InternalActionResult>,
-    _context: IterationContext,
-}
-
 struct TestResultBuilderInner {
     http_timings: HashMap<String, HashMap<StatusCode, Histogram<u64>>>,
-    _timings: HashMap<String, Vec<Duration>>,
-    full_log: Vec<TestResultLogItem>,
+    started_at: Instant,
 }
 
 impl TestResultBuilderInner {
     fn new() -> Self {
         TestResultBuilderInner {
             http_timings: HashMap::new(),
-            _timings: HashMap::new(),
-            full_log: Vec::with_capacity(512),
+            started_at: Instant::now(),
         }
     }
 
     fn mark_success_iteration(
         &mut self,
         actions: Vec<InternalActionResult>,
-        context: IterationContext,
+        _context: IterationContext,
     ) {
         for action in &actions {
             match &action.internal {
@@ -76,12 +70,6 @@ impl TestResultBuilderInner {
                 Err(_) => {}
             }
         }
-
-        let log_item = TestResultLogItem {
-            _actions: actions,
-            _context: context,
-        };
-        self.full_log.push(log_item);
     }
 
     fn mark_success_action(&mut self, info: &ActionExecutionInfo, action: &InternalActionResult) {
@@ -125,11 +113,19 @@ impl TestResultBuilderInner {
         timings_log.record(duration_as_ns).unwrap();
     }
 
-    fn build_http_timings(&self) -> HashMap<String, HashMap<String, TestResultTimingLogItem>> {
+    fn build_http_timings(
+        &self,
+    ) -> (
+        HashMap<String, HashMap<String, TestResultTimingLogItem>>,
+        u64,
+    ) {
         let mut res = HashMap::with_capacity(self.http_timings.len());
+        let mut call_count = 0;
         for (name, log) in &self.http_timings {
             let mut current_group = HashMap::new();
             for (status, hist) in log {
+                let log_item = TestResultTimingLogItem::map_from_histogram(hist);
+                call_count += log_item.metric_len;
                 current_group.insert(
                     status.to_string(),
                     TestResultTimingLogItem::map_from_histogram(hist),
@@ -139,11 +135,17 @@ impl TestResultBuilderInner {
             res.insert(name.to_string(), current_group);
         }
 
-        res
+        (res, call_count)
     }
 
     pub fn build(&self) -> TestResult {
-        let timings = self.build_http_timings();
-        TestResult { timings }
+        let (timings, requests) = self.build_http_timings();
+        let time_since_started = Instant::now() - self.started_at;
+        let requests_per_second = (requests as f64) / time_since_started.as_secs_f64();
+        TestResult {
+            timings,
+            requests_per_second,
+            duration: None,
+        }
     }
 }

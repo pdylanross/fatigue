@@ -1,9 +1,9 @@
 run:
   base_url: http://localhost:8000
-  concurrency: 2
+  concurrency: 70
   duration:
     timed:
-      duration: 20s
+      duration: 2m
       warm_up: 1s
       iterations: 1
 static_context:

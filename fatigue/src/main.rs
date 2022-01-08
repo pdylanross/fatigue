@@ -2,6 +2,8 @@
 extern crate thiserror;
 #[macro_use]
 extern crate clap;
+#[macro_use]
+extern crate prettytable;
 
 use crate::output::{get_output_formatter, OutputFormatter};
 use clap::{App, Arg};

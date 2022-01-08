@@ -98,7 +98,9 @@ fn start_test_run_watch_handler(
 ) -> JoinHandle<()> {
     spawn(async move {
         while ctx.is_not_done() {
-            let results = ctx.get_test_results().await;
+            let mut results = ctx.get_test_results().await;
+            let status = ctx.get_duration_status();
+            results.duration = Some(status);
             let send_res = sender.send(results);
 
             // todo: probably handle this better?

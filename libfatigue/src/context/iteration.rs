@@ -1,4 +1,4 @@
-use crate::context::TestDurationTracker;
+use crate::context::{TestDurationStatus, TestDurationTracker};
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::time::{Duration, Instant};
 use tokio::sync::RwLock;
@@ -44,6 +44,13 @@ impl TestDurationTracker for IterationDurationTracker {
     async fn should_track_iteration(&self) -> bool {
         self.warm_up.is_done().await
     }
+
+    fn get_status(&self) -> TestDurationStatus {
+        TestDurationStatus::Iteration {
+            until: self.iterations,
+            current: self.count.load(Ordering::Relaxed),
+        }
+    }
 }
 
 pub(crate) struct TimedDurationTracker {
@@ -85,6 +92,12 @@ impl TestDurationTracker for TimedDurationTracker {
 
     async fn should_track_iteration(&self) -> bool {
         self.warm_up.is_done().await
+    }
+
+    fn get_status(&self) -> TestDurationStatus {
+        TestDurationStatus::Timed {
+            remaining: self.ends_at - Instant::now(),
+        }
     }
 }
 

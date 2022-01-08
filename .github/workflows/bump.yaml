@@ -14,8 +14,6 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     name: Bump
-    outputs:
-      should-publish: ${{ steps.add-and-commit.outputs.committed }}
     steps:
       - name: Check out
         uses: actions/checkout@v2
@@ -54,21 +52,7 @@ jobs:
           tag_name: ${{ env.REVISION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  release-crate:
-    runs-on: ubuntu-latest
-    needs: bump
-    if: ${{ needs.bump.outputs.should-publish }}
-    name: Release Crate
-    steps:
-      - name: Check out
-        uses: actions/checkout@v2
-        with:
-          token: "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
-          fetch-depth: 0
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - uses: Swatinem/rust-cache@v1
       - uses: katyo/publish-crates@v1
+        if: ${{ steps.add-and-commit.outputs.committed }}
         with:
           registry-token: ${{ secrets.CARGO_REGISTRY_TOKEN }}
