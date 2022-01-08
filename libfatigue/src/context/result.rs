@@ -4,8 +4,8 @@ use crate::TestResult;
 use hdrhistogram::Histogram;
 use reqwest::StatusCode;
 use std::collections::HashMap;
-use std::sync::Mutex;
 use std::time::Duration;
+use tokio::sync::Mutex;
 
 pub(crate) struct TestResultBuilder {
     inner: Mutex<TestResultBuilderInner>,
@@ -18,10 +18,10 @@ impl TestResultBuilder {
         }
     }
 
-    pub fn mark_iteration(&self, iteration: IterationResult) {
+    pub async fn mark_iteration(&self, iteration: IterationResult) {
         match iteration {
             IterationResult::Ok { actions, context } => {
-                self.mark_success_iteration(actions, context);
+                self.mark_success_iteration(actions, context).await;
             }
             IterationResult::ContextError { err } => {
                 // todo: handle this more gracefully
@@ -30,17 +30,17 @@ impl TestResultBuilder {
         }
     }
 
-    fn mark_success_iteration(
+    async fn mark_success_iteration(
         &self,
         actions: Vec<InternalActionResult>,
         context: IterationContext,
     ) {
-        let mut guard = self.inner.lock().unwrap();
+        let mut guard = self.inner.lock().await;
         guard.mark_success_iteration(actions, context)
     }
 
-    pub fn build(&self) -> TestResult {
-        let guard = self.inner.lock().unwrap();
+    pub async fn build(&self) -> TestResult {
+        let guard = self.inner.lock().await;
         guard.build()
     }
 }

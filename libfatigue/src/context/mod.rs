@@ -175,15 +175,15 @@ impl TestRunContext {
         !self.duration_tracker.is_done()
     }
 
-    pub(crate) fn mark_iteration(&self, result: IterationResult) {
-        if self.duration_tracker.should_track_iteration() {
-            self.result_builder.mark_iteration(result);
+    pub(crate) async fn mark_iteration(&self, result: IterationResult) {
+        if self.duration_tracker.should_track_iteration().await {
+            self.result_builder.mark_iteration(result).await;
         }
-        self.duration_tracker.mark_iteration();
+        self.duration_tracker.mark_iteration().await;
     }
 
-    pub(crate) fn get_test_results(&self) -> TestResult {
-        self.result_builder.build()
+    pub(crate) async fn get_test_results(&self) -> TestResult {
+        self.result_builder.build().await
     }
 
     pub(crate) fn _mark_exit(&self) {
@@ -233,11 +233,12 @@ impl StaticContextTracker {
     }
 }
 
+#[async_trait]
 pub(crate) trait TestDurationTracker {
-    fn mark_iteration(&self);
+    async fn mark_iteration(&self);
     fn mark_exit(&self);
     fn is_done(&self) -> bool;
-    fn should_track_iteration(&self) -> bool;
+    async fn should_track_iteration(&self) -> bool;
 }
 
 fn get_duration_tracker(

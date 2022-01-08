@@ -1,7 +1,7 @@
 use crate::context::TestDurationTracker;
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
-use std::sync::RwLock;
 use std::time::{Duration, Instant};
+use tokio::sync::RwLock;
 
 pub(crate) struct IterationDurationTracker {
     warm_up: WarmUpTracker,
@@ -21,9 +21,10 @@ impl IterationDurationTracker {
     }
 }
 
+#[async_trait]
 impl TestDurationTracker for IterationDurationTracker {
-    fn mark_iteration(&self) {
-        if self.should_track_iteration() {
+    async fn mark_iteration(&self) {
+        if self.should_track_iteration().await {
             let old = self.count.fetch_add(1, Ordering::Relaxed);
             let approx_cur = old + 1;
             if approx_cur >= self.iterations {
@@ -40,8 +41,8 @@ impl TestDurationTracker for IterationDurationTracker {
         self.is_done.load(Ordering::Relaxed)
     }
 
-    fn should_track_iteration(&self) -> bool {
-        self.warm_up.is_done()
+    async fn should_track_iteration(&self) -> bool {
+        self.warm_up.is_done().await
     }
 }
 
@@ -67,8 +68,9 @@ impl TimedDurationTracker {
     }
 }
 
+#[async_trait]
 impl TestDurationTracker for TimedDurationTracker {
-    fn mark_iteration(&self) {
+    async fn mark_iteration(&self) {
         // no-op
     }
 
@@ -81,8 +83,8 @@ impl TestDurationTracker for TimedDurationTracker {
         (now > self.ends_at) || (self.is_done.load(Ordering::Relaxed))
     }
 
-    fn should_track_iteration(&self) -> bool {
-        self.warm_up.is_done()
+    async fn should_track_iteration(&self) -> bool {
+        self.warm_up.is_done().await
     }
 }
 
@@ -101,9 +103,9 @@ impl WarmUpTracker {
         WarmUpTracker { inner }
     }
 
-    fn is_done(&self) -> bool {
+    async fn is_done(&self) -> bool {
         {
-            let guard = self.inner.read().unwrap();
+            let guard = self.inner.read().await;
             match &*guard {
                 Some(inner) => {
                     let inner_res = inner.is_done();
@@ -117,7 +119,7 @@ impl WarmUpTracker {
             }
         }
         {
-            let mut guard = self.inner.write().unwrap();
+            let mut guard = self.inner.write().await;
             match &*guard {
                 None => true,
                 Some(inner) => {

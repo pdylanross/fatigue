@@ -307,7 +307,7 @@ checksum = "e88a8acf291dafb59c2d96e8f59828f3838bb1a70398823ade51a84de6a6deed"
 
 [[package]]
 name = "fatigue"
-version = "0.2.1"
+version = "0.2.2"
 dependencies = [
  "clap",
  "console",
@@ -706,7 +706,7 @@ checksum = "1b03d17f364a3a042d5e5d46b053bbbf82c92c9430c592dd4c064dc6ee997125"
 
 [[package]]
 name = "libfatigue"
-version = "0.2.1"
+version = "0.2.2"
 dependencies = [
  "async-trait",
  "dashmap",

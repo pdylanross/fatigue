@@ -56,7 +56,7 @@ impl TestRunner {
 
         join_all(join_handles).await;
 
-        Ok(self.ctx.get_test_results())
+        Ok(self.ctx.get_test_results().await)
     }
 
     fn start_workers(&self) -> Vec<JoinHandle<()>> {
@@ -86,7 +86,7 @@ fn start_iteration_result_watch(
             let rx_iter = rx.next().await;
             match rx_iter {
                 None => return,
-                Some(res) => ctx.mark_iteration(res),
+                Some(res) => ctx.mark_iteration(res).await,
             }
         }
     })
@@ -98,7 +98,7 @@ fn start_test_run_watch_handler(
 ) -> JoinHandle<()> {
     spawn(async move {
         while ctx.is_not_done() {
-            let results = ctx.get_test_results();
+            let results = ctx.get_test_results().await;
             let send_res = sender.send(results);
 
             // todo: probably handle this better?

@@ -2,7 +2,8 @@ name: Release Crate
 
 on:
   release:
-    types: [created]
+    types:
+      - published
 
 jobs:
   release:
