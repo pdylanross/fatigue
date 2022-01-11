@@ -1,5 +1,6 @@
 use crate::{ContextActionFactory, ContextActionFactoryError};
 
+pub mod csv;
 pub mod json;
 pub mod literal;
 
@@ -8,5 +9,6 @@ pub fn register_default_context_actions(
 ) -> Result<(), ContextActionFactoryError> {
     factory.register_builder(literal::get_builder())?;
     factory.register_builder(json::get_builder())?;
+    factory.register_builder(csv::get_builder())?;
     Ok(())
 }

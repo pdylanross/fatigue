@@ -1,10 +1,10 @@
 use crate::config::types::FatigueStaticContextAction;
+use crate::context::helpers::{context_validation_error, to_ok_context_result};
 use crate::context::{
-    context_validation_error, ContextMap, StaticContext, StaticContextAction,
-    StaticContextActionBuilder, StaticContextActionBuilderError, StaticContextResult,
+    StaticContextAction, StaticContextActionBuilder, StaticContextActionBuilderError,
+    StaticContextResult,
 };
 use crate::{FatigueTesterRunInformation, StaticContextActionPointer};
-use liquid::model::to_value;
 use serde_json::Value;
 use std::fs::File;
 use std::sync::Arc;
@@ -50,11 +50,7 @@ impl StaticContextAction for JsonContextAction {
             }
         };
 
-        let mut map = ContextMap::new();
-        let val = to_value(&res)?;
-        map.insert(self.name.clone(), val);
-        let res = StaticContext { items: map };
-        Ok(res)
+        to_ok_context_result(self, &res)
     }
 
     async fn should_refresh(&self) -> bool {

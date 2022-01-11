@@ -796,6 +796,7 @@ name = "libfatigue"
 version = "0.2.5"
 dependencies = [
  "async-trait",
+ "csv",
  "dashmap",
  "futures",
  "hdrhistogram",

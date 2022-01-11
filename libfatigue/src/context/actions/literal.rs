@@ -1,12 +1,11 @@
 use crate::config::types::FatigueStaticContextAction;
+use crate::context::helpers::{context_validation_error, to_ok_context_result};
 use crate::context::{
-    context_validation_error, ContextMap, StaticContext, StaticContextAction,
-    StaticContextActionBuilder, StaticContextActionBuilderError, StaticContextResult,
+    StaticContextAction, StaticContextActionBuilder, StaticContextActionBuilderError,
+    StaticContextResult,
 };
 use crate::{FatigueTesterRunInformation, StaticContextActionPointer};
-use liquid::model::to_value;
 use serde_yaml::Value;
-use std::collections::HashMap;
 use std::sync::Arc;
 
 struct LiteralContextAction {
@@ -21,13 +20,7 @@ struct LiteralContextActionProps {
 #[async_trait]
 impl StaticContextAction for LiteralContextAction {
     async fn execute(&self) -> StaticContextResult {
-        let mut map: ContextMap = HashMap::new();
-
-        let val = to_value(&self.props.value)?;
-        map.insert(self.name.clone(), val);
-        let res = StaticContext { items: map };
-
-        Ok(res)
+        to_ok_context_result(self, &self.props.value)
     }
 
     async fn should_refresh(&self) -> bool {

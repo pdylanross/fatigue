@@ -12,6 +12,7 @@ use std::time::Duration;
 use tokio::sync::RwLock;
 
 pub mod actions;
+pub mod helpers;
 mod iteration;
 mod result;
 
@@ -50,6 +51,8 @@ pub enum StaticContextError {
     JsonDeserialization(#[from] serde_json::Error),
     #[error("io error: {0}")]
     IoError(#[from] std::io::Error),
+    #[error("csv error: {0}")]
+    CsvError(#[from] csv::Error),
 }
 #[derive(Debug, Error)]
 pub enum StaticContextActionBuilderError {
@@ -57,17 +60,6 @@ pub enum StaticContextActionBuilderError {
     YamlDeserializationError(#[from] serde_yaml::Error),
     #[error("error building action {0}: {1}")]
     ValidationError(&'static str, String),
-}
-
-/// A helper to build an error when field validation failed on a context action builder
-pub fn context_validation_error<S: Into<String>>(
-    builder: &impl StaticContextActionBuilder,
-    msg: S,
-) -> Result<StaticContextActionPointer, StaticContextActionBuilderError> {
-    Err(StaticContextActionBuilderError::ValidationError(
-        builder.get_type_name(),
-        msg.into(),
-    ))
 }
 
 #[derive(Debug)]

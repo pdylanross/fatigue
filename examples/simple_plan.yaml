@@ -1,11 +1,11 @@
 run:
   base_url: http://localhost:8000
-  concurrency: 70
+  concurrency: 32
   duration:
     timed:
       duration: 20s
-      warm_up: 1s
-      iterations: 10000
+      warm_up: 10s
+      iterations: 1
 static_context:
   - type: literal
     name: users
@@ -36,12 +36,37 @@ static_context:
         {
           "a": "b"
         }
+  - type: csv
+    name: with-header
+    properties:
+      path: ./with_header.csv
+  - type: csv
+    name: without-header
+    properties:
+      path: ./without_header.csv
+      has_headers: false
 actions:
+#  - type: print_context
+#    properties: { }
   - type: request
     properties:
       path: /ping
   - type: request
-    name: say hello
+    name: say hello - csv with header
+    properties:
+      path: |
+        {% for item in with-header %}
+            /hello/{{item.FirstName}}/{{item.Age}}
+        {% endfor %}
+  - type: request
+    name: say hello - csv without header
+    properties:
+      path: |
+        {% for item in without-header %}
+            /hello/{{item["0"]}}/{{item["2"]}}
+        {% endfor %}
+  - type: request
+    name: say hello - from literal
     properties:
       path: |
         {% for name in users.names %}
@@ -91,5 +116,3 @@ actions:
           "id": "{{items[0]}}",
           "data": "{{items[0]}}"
         }
-#  - type: print_context
-#    properties: {}
