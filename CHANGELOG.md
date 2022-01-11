@@ -1,3 +1,12 @@
+## 0.2.6 (2022-01-11)
+
+
+- feat: csv loading
+- feat: added json context action
+- ci: prevent publish when we aren't actually publishing
+- doc: updated demo gif, totally thought those borders were transparent
+- doc: added demo gif and readme skeleton
+
 ## 0.2.5 (2022-01-08)
 
 
