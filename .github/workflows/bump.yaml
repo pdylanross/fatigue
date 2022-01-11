@@ -54,6 +54,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: katyo/publish-crates@v1
+        name: Release lib
         if: ${{ success() && steps.add-and-commit.outputs.committed == 'true' }}
         with:
           registry-token: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+          path: ./libfatigue
+      - uses: katyo/publish-crates@v1
+        name: Release Bin
+        if: ${{ success() && steps.add-and-commit.outputs.committed == 'true' }}
+        with:
+          registry-token: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+          path: ./fatigue
