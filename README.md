@@ -74,7 +74,7 @@ run:
 
 ### static_context
 
-The context is data that flows between actions. Actions can modify a context within their given iteration, but often times we will want to setup the context once for the entire test run. Static context information is saved under a key based on the static context action's name. Each static context action will have a default name if one is not set, and subsequent context actions can override prior context actions if there are name conflicts. 
+The context is data that flows between actions. Actions can modify a context within their given iteration, but we will often want to setup the context once for the entire test run. Static context information is saved under a key based on the static context action's name. Each static context action will have a default name if one is not set, and subsequent context actions can override prior context actions if there are name conflicts. 
 
 #### literal
 
@@ -214,7 +214,7 @@ APIs are still in flux and this section of the documentation is highly likely to
 
 ## Contribution
 
-
+[Contributing](CONTRIBUTING.md)
 
 ## Inspiration
 
