@@ -3,7 +3,7 @@ run:
   concurrency: 70
   duration:
     timed:
-      duration: 2m
+      duration: 20s
       warm_up: 1s
       iterations: 10000
 static_context:
@@ -25,6 +25,17 @@ static_context:
       - 202
       - 400
       - 502
+  - type: json
+    name: json-from-file
+    properties:
+      path: ./test-1.json
+  - type: json
+    name: json-from-raw
+    properties:
+      raw: |
+        {
+          "a": "b"
+        }
 actions:
   - type: request
     properties:
@@ -35,6 +46,19 @@ actions:
       path: |
         {% for name in users.names %}
           {% for age in users.ages %}
+            /hello/{{name}}/{{age}}
+          {% endfor %}
+        {% endfor %}
+  - type: request
+    name: say hello raw-json
+    properties:
+      path: /hello/{{json-from-raw.a}}/3
+  - type: request
+    name: say hello file-json
+    properties:
+      path: |
+        {% for name in json-from-file.names %}
+          {% for age in json-from-file.ages %}
             /hello/{{name}}/{{age}}
           {% endfor %}
         {% endfor %}

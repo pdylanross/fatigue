@@ -1,7 +1,7 @@
 use crate::context::IterationResult;
 use crate::{FatigueTestError, InternalAction, TestResult, TestRunContext, TestRunSettings};
 use futures::channel::mpsc::{channel, Receiver, Sender};
-use futures::future::join_all;
+use futures::future::select_all;
 use futures::{SinkExt, StreamExt};
 use std::sync::Arc;
 use std::time::Duration;
@@ -54,12 +54,27 @@ impl TestRunner {
             }
         }
 
-        join_all(join_handles).await;
+        while !join_handles.is_empty() {
+            let (current_result, _remaining, jh) = select_all(join_handles).await;
+            join_handles = jh;
+
+            match current_result {
+                Ok(inner_result) => match inner_result {
+                    Ok(_) => continue,
+                    Err(e) => {
+                        return Err(e);
+                    }
+                },
+                Err(je) => {
+                    je.into_panic();
+                }
+            }
+        }
 
         Ok(self.ctx.get_test_results().await)
     }
 
-    fn start_workers(&self) -> Vec<JoinHandle<()>> {
+    fn start_workers(&self) -> Vec<JoinHandle<Result<(), FatigueTestError>>> {
         let worker_count = self.ctx.info.concurrency.unwrap_or(1);
         let mut join_handles = Vec::with_capacity(worker_count);
         for _i in 0..worker_count {
@@ -68,7 +83,7 @@ impl TestRunner {
             let actions = self.actions.clone();
             let join_handle = spawn(async move {
                 let new_worker = TestRunWorker::new(iteration_tx, ctx, actions);
-                new_worker.run().await;
+                new_worker.run().await
             });
             join_handles.push(join_handle);
         }
@@ -80,22 +95,24 @@ impl TestRunner {
 fn start_iteration_result_watch(
     mut rx: Receiver<IterationResult>,
     ctx: Arc<TestRunContext>,
-) -> JoinHandle<()> {
+) -> JoinHandle<Result<(), FatigueTestError>> {
     spawn(async move {
         while ctx.is_not_done() {
             let rx_iter = rx.next().await;
             match rx_iter {
-                None => return,
+                None => return Ok(()),
                 Some(res) => ctx.mark_iteration(res).await,
             }
         }
+
+        Ok(())
     })
 }
 
 fn start_test_run_watch_handler(
     sender: watch::Sender<TestResult>,
     ctx: Arc<TestRunContext>,
-) -> JoinHandle<()> {
+) -> JoinHandle<Result<(), FatigueTestError>> {
     spawn(async move {
         while ctx.is_not_done() {
             let mut results = ctx.get_test_results().await;
@@ -105,11 +122,13 @@ fn start_test_run_watch_handler(
 
             // todo: probably handle this better?
             if send_res.is_err() {
-                return;
+                return Ok(());
             }
 
             time::sleep(Duration::from_millis(200)).await;
         }
+
+        Ok(())
     })
 }
 
@@ -132,33 +151,28 @@ impl TestRunWorker {
         }
     }
 
-    async fn run(mut self) {
+    async fn run(mut self) -> Result<(), FatigueTestError> {
         while self.ctx.is_not_done() {
-            let context = self.ctx.new_iteration_ctx().await;
-            let iteration_result: IterationResult = match context {
-                Ok(mut c) => {
-                    let mut actions = Vec::with_capacity(self.actions.len());
-                    for action in self.actions.iter() {
-                        let current_res = action.execute(&mut c).await;
-                        match &current_res.internal {
-                            Ok(_) => {}
-                            Err(e) => {
-                                println!("action err {:#?}", e);
-                            }
-                        }
-                        actions.push(current_res);
-                    }
-                    IterationResult::Ok {
-                        actions,
-                        context: c,
+            let mut context = self.ctx.new_iteration_ctx().await?;
+
+            let mut actions = Vec::with_capacity(self.actions.len());
+            for action in self.actions.iter() {
+                let current_res = action.execute(&mut context).await;
+                match &current_res.internal {
+                    Ok(_) => {}
+                    Err(e) => {
+                        println!("action err {:#?}", e);
                     }
                 }
-                Err(err) => IterationResult::ContextError { err },
-            };
+                actions.push(current_res);
+            }
+            let iteration_result = IterationResult::Ok { actions, context };
 
             if self.iteration_tx.feed(iteration_result).await.is_err() {
-                return;
+                return Ok(());
             }
         }
+
+        Ok(())
     }
 }

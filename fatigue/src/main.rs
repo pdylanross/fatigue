@@ -13,10 +13,11 @@ use libfatigue::{
     FatigueTestError, FatigueTester, FatigueTesterBuilder, FatigueTesterBuilderError,
     TestRunSettings, TestRunWatchSettings,
 };
+use std::env::set_current_dir;
 use std::path::Path;
+use std::process::exit;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
-use std::time::Duration;
 use tokio::join;
 use tokio::sync::watch;
 
@@ -74,18 +75,23 @@ async fn execute_command<'a, 'b>(app: App<'a, 'b>) -> Result<(), AppError> {
         ..Default::default()
     };
 
+    // any file path based operations are done from the perspective of the config file
+    let base_dir = plan_file
+        .parent()
+        .expect("could not load parent dir of the config file");
+    set_current_dir(base_dir).expect("could not change cwd to the directory of the config file");
+
     let output_formatter = Arc::new(get_output_formatter());
     let is_done = Arc::new(AtomicBool::new(false));
 
     join!(
-        result_watch(watch_rx, output_formatter.clone()),
+        result_watch(watch_rx, output_formatter.clone(), is_done.clone()),
         run_tester(
             tester,
             test_settings,
             output_formatter.clone(),
             is_done.clone()
-        ),
-        ui_update(output_formatter.clone(), is_done.clone())
+        )
     );
 
     Ok(())
@@ -94,16 +100,10 @@ async fn execute_command<'a, 'b>(app: App<'a, 'b>) -> Result<(), AppError> {
 async fn result_watch(
     mut rx: watch::Receiver<TestResult>,
     output_formatter: Arc<Box<dyn OutputFormatter>>,
+    is_done: Arc<AtomicBool>,
 ) {
-    while rx.changed().await.is_ok() {
+    while rx.changed().await.is_ok() && !is_done.load(Ordering::Relaxed) {
         output_formatter.update_result_status(&*rx.borrow());
-    }
-}
-
-async fn ui_update(output_formatter: Arc<Box<dyn OutputFormatter>>, is_done: Arc<AtomicBool>) {
-    while !is_done.load(Ordering::Relaxed) {
-        output_formatter.tick();
-        tokio::time::sleep(Duration::from_millis(33)).await;
     }
 }
 
@@ -116,7 +116,10 @@ async fn run_tester(
     let result = tester.execute_async(settings).await;
     match result {
         Ok(result) => output_formatter.write_final_results(result),
-        Err(err) => output_formatter.write_err(err),
+        Err(err) => {
+            output_formatter.write_err(err);
+            exit(-1);
+        }
     }
 
     is_done.store(true, Ordering::Release);

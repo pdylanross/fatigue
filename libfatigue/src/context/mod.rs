@@ -42,16 +42,20 @@ pub struct StaticContext {
 
 #[derive(Debug, Error)]
 pub enum StaticContextError {
-    #[error("templating error: `{0}`")]
+    #[error("templating error: {0}")]
     TemplateError(#[from] liquid::Error),
-    #[error("error deserializing properties: `{0}`")]
+    #[error("error deserializing properties: {0}")]
     YamlDeserializationError(#[from] serde_yaml::Error),
+    #[error("error deserializing json: {0}")]
+    JsonDeserialization(#[from] serde_json::Error),
+    #[error("io error: {0}")]
+    IoError(#[from] std::io::Error),
 }
 #[derive(Debug, Error)]
 pub enum StaticContextActionBuilderError {
-    #[error("error deserializing properties: `{0}`")]
+    #[error("error deserializing properties: {0}")]
     YamlDeserializationError(#[from] serde_yaml::Error),
-    #[error("error building action `{0}`: `{1}`")]
+    #[error("error building action {0}: {1}")]
     ValidationError(&'static str, String),
 }
 
@@ -74,14 +78,17 @@ pub struct IterationContext {
     pub items: ContextMap,
 }
 
+#[derive(Debug, Error)]
+pub enum IterationContextError {
+    #[error("error from static context {0}: {1}")]
+    StaticContext(String, StaticContextError),
+}
+
 #[derive(Debug)]
 pub(crate) enum IterationResult {
     Ok {
         actions: Vec<InternalActionResult>,
         context: IterationContext,
-    },
-    ContextError {
-        err: StaticContextError,
     },
 }
 
@@ -168,16 +175,35 @@ impl TestRunContext {
         }
     }
 
-    pub(crate) async fn new_iteration_ctx(&self) -> Result<IterationContext, StaticContextError> {
+    pub(crate) async fn new_iteration_ctx(
+        &self,
+    ) -> Result<IterationContext, IterationContextError> {
         let mut items = HashMap::with_capacity(self.static_contexts.len());
         for v in &self.static_contexts {
-            let v = v.value().get_val().await?;
-            for (k, v) in v.items {
-                items.insert(k.clone(), to_value(&v)?);
+            let name = v.key().clone();
+            if let Err(e) = self.write_static_context(&mut items, name.as_str()).await {
+                return Err(IterationContextError::StaticContext(name, e));
             }
         }
 
         Ok(IterationContext { items })
+    }
+
+    async fn write_static_context(
+        &self,
+        items: &mut HashMap<String, Value>,
+        key: &str,
+    ) -> Result<(), StaticContextError> {
+        let v = self
+            .static_contexts
+            .get(key)
+            .expect("should be called from an iterator");
+        let v = v.value().get_val().await?;
+        for (k, v) in v.items {
+            items.insert(k.clone(), to_value(&v)?);
+        }
+
+        Ok(())
     }
 
     pub(crate) fn is_not_done(&self) -> bool {

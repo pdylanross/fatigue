@@ -46,6 +46,7 @@ jobs:
           message: "Release ${{ env.REVISION }} [skip ci]"
           push: true
       - name: Release
+        if: ${{ success() && steps.add-and-commit.outputs.committed == 'true' }}
         uses: softprops/action-gh-release@v1
         with:
           body_path: "body.md"

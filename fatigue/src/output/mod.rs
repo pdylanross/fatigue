@@ -8,7 +8,6 @@ pub(crate) trait OutputFormatter {
     fn update_result_status(&self, result: &TestResult);
     fn write_final_results(&self, results: TestResult);
     fn write_err(&self, err: FatigueTestError);
-    fn tick(&self);
 }
 
 pub(crate) fn get_output_formatter() -> Box<dyn OutputFormatter> {

@@ -8,7 +8,9 @@ extern crate serde;
 use crate::actions::{register_default_actions, ActionPointer, InternalAction};
 use crate::config::types::{FatigueTesterConfig, FatigueTesterRunInformation};
 use crate::context::actions::register_default_context_actions;
-use crate::context::{StaticContextActionPointer, TestResult, TestRunContext};
+use crate::context::{
+    IterationContextError, StaticContextActionPointer, TestResult, TestRunContext,
+};
 use crate::factories::{
     ActionFactory, ActionFactoryError, ContextActionFactory, ContextActionFactoryError,
 };
@@ -38,8 +40,10 @@ pub struct FatigueTester {
 pub enum FatigueTestError {
     #[error(transparent)]
     Io(#[from] std::io::Error),
-    #[error("No async runtime available: `{0}`")]
+    #[error("No async runtime available: {0}")]
     NoRuntime(#[from] tokio::runtime::TryCurrentError),
+    #[error("error setting up the context: {0}")]
+    IterationContext(#[from] IterationContextError),
 }
 
 #[derive(Default)]
@@ -126,13 +130,13 @@ pub struct FatigueTesterBuilder {
 pub enum FatigueTesterBuilderError {
     #[error("io error")]
     IoError(#[from] std::io::Error),
-    #[error("yaml deserialization error: `{0}`")]
+    #[error("yaml deserialization error: {0}")]
     YamlError(#[from] serde_yaml::Error),
     #[error("config not set")]
     MissingConfig,
-    #[error("action factory error `{0}`")]
+    #[error("action factory error: {0}")]
     ActionFactoryError(#[from] ActionFactoryError),
-    #[error("context action factory error `{0}`")]
+    #[error("context action factory error: {0}")]
     ContextActionFactoryError(#[from] ContextActionFactoryError),
 }
 

@@ -24,10 +24,6 @@ impl TestResultBuilder {
             IterationResult::Ok { actions, context } => {
                 self.mark_success_iteration(actions, context).await;
             }
-            IterationResult::ContextError { err } => {
-                // todo: handle this more gracefully
-                panic!("iteration failed with err: {:#?}", err)
-            }
         }
     }
 

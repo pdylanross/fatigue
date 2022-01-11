@@ -65,11 +65,10 @@ impl OutputFormatter for PrettyOutputFormatter {
         guard.write(&result);
     }
 
-    fn write_err(&self, _err: FatigueTestError) {
-        todo!()
+    fn write_err(&self, err: FatigueTestError) {
+        let mut guard = self.inner.lock().unwrap();
+        guard.write_err(err);
     }
-
-    fn tick(&self) {}
 }
 
 impl PrettyInner {
@@ -79,6 +78,13 @@ impl PrettyInner {
             .queue(Clear(ClearType::FromCursorDown))
             .expect("todo: result handling");
     }
+
+    fn write_err(&mut self, err: FatigueTestError) {
+        self.clear();
+        self.out.queue(Print(err)).expect("todo: result handling");
+        self.out.flush().expect("todo: result handling");
+    }
+
     fn write(&mut self, val: &TestResult) {
         self.out.queue(MoveTo(0, 0)).expect("todo: result handling");
 
