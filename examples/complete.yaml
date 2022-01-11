@@ -4,8 +4,7 @@ run:
   duration:
     timed:
       duration: 20s
-      warm_up: 10s
-      iterations: 1
+      warm_up: 1s
 static_context:
   - type: literal
     name: users

@@ -1,0 +1,10 @@
+run:
+  base_url: http://localhost:8000
+  duration:
+    timed:
+      duration: 20s
+      warm_up: 1s
+actions:
+  - type: request
+    properties:
+      path: /ping
