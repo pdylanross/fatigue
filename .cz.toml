@@ -4,8 +4,8 @@ name = "cz_customize"
 tag_format = "$major.$minor.$patch"
 version = "0.2.6"
 [tool.commitizen.customize]
-bump_map = {feat = "PATCH", break = "MINOR", fix = "PATCH", chore = "PATCH"}
-bump_pattern = "^(feat|fix|break|chore)"
+bump_map = {feat = "PATCH", break = "MINOR", fix = "PATCH"}
+bump_pattern = "^(feat|fix|break)"
 example = "feat: this feature enable customize through config file"
 message_template = "{{change_type}}: {{message}}"
 schema = "<type>: <body>"
