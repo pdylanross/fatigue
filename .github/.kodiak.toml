@@ -1,2 +1,3 @@
+version = 1
 [merge]
 method="rebase_fast_forward"
