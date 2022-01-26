@@ -1,9 +1,7 @@
 [workspace]
 members = [
-    "fatigue",
-    "libfatigue"
+  "fatigue",
+  "libfatigue",
+  "examples/test-api",
 ]
 
-exclude = [
-    "examples/test-api/test-api"
-]

@@ -172,11 +172,14 @@ impl FatigueTesterBuilder {
         config_str: S,
     ) -> Result<FatigueTesterBuilder, FatigueTesterBuilderError> {
         let config: FatigueTesterConfig = serde_yaml::from_str(config_str.as_ref())?;
-        let builder = FatigueTesterBuilder {
+        Ok(FatigueTesterBuilder::new_from_config(config))
+    }
+
+    pub fn new_from_config(config: FatigueTesterConfig) -> Self {
+        FatigueTesterBuilder {
             config: Some(config),
             ..Default::default()
-        };
-        Ok(builder)
+        }
     }
 
     pub fn with_config(mut self, config: FatigueTesterConfig) -> Self {

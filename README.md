@@ -24,27 +24,16 @@ fatigue is a load testing tool with a simple, yet expressive, config format that
 
 ## Quick Start
 
-1. `cargo install fatigue`
-2. Create a configuration file
-```yaml
-run:
-  base_url: http://localhost:8000
-  concurrency: 32
-  duration:
-    timed:
-      duration: 20s
-      warm_up: 1s
-actions:
-  - type: request
-    properties:
-      path: /ping
-
-```
-3. `fatigue --plan ./my-plan.yaml`
+1. Run the test API.
+   > `cargo run -p test-api`
+2. Run fatigue 
+   > `fatigue -p ./examples/simple.yaml`
 
 ## Configuration
 
 The configuration syntax is divided into three sections. A complete example of all of the features of the configuration file syntax can be seen in `examples/complete.yaml`.
+
+Configuration values can be overridden with environment variables prefixed via `fatigue` with a dot as the separator (ie `fatigue.run.base_url=http://localhost:8000`). See [figment documentation](https://docs.rs/figment/latest/figment/) for more information.
 
 ### run
 
@@ -69,6 +58,8 @@ run:
       iterations: 1000
       warm_up: 1s
 ```
+
+
 
 ### static_context
 

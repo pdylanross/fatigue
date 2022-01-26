@@ -7,6 +7,9 @@ extern crate prettytable;
 
 use crate::output::{get_output_formatter, OutputFormatter};
 use clap::{App, Arg};
+use figment::providers::{Env, Format, Yaml};
+use figment::Figment;
+use libfatigue::config::types::FatigueTesterConfig;
 use libfatigue::context::TestResult;
 use libfatigue::factories::{ActionFactoryError, ContextActionFactoryError};
 use libfatigue::{
@@ -35,6 +38,8 @@ enum AppError {
     ContextActionFactory(#[from] ContextActionFactoryError),
     #[error("error running test: `{0}`")]
     TestError(#[from] FatigueTestError),
+    #[error("error constructing config: {0}")]
+    FigmentError(#[from] figment::Error),
 }
 
 fn init() -> Result<(), AppError> {
@@ -61,7 +66,17 @@ async fn execute_command<'a, 'b>(app: App<'a, 'b>) -> Result<(), AppError> {
         Some(val) => Path::new(val),
     };
 
-    let tester = FatigueTesterBuilder::new_from_config_file(plan_file)?
+    let config: FatigueTesterConfig = Figment::new()
+        .merge(Yaml::file(plan_file))
+        .merge(Env::prefixed("fatigue."))
+        .extract()?;
+
+    let env = Env::raw();
+    let global = env.global();
+
+    println!("{:#?}", global);
+
+    let tester = FatigueTesterBuilder::new_from_config(config)
         .with_default_actions()?
         .with_default_context_actions()?
         .build()?;
