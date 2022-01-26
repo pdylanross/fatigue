@@ -20,9 +20,7 @@ A load testing tool that's sure to cause stress fractures.
 
 ## Overview
 
-fatigue is a load testing tool with a simple, yet expressive, config format that makes it easy to topple your services in a matter of minutes. It boasts impressive request per second rates while respecting your system's resources. It is able to do this due to the impressive async ecosystem in rust. 
-
-It was also built with extensibility in mind, and as such, it's trivial to extend with adapters for your application's specific API formats or transport layers. 
+fatigue is a load testing tool with a simple, yet expressive, config format that makes it easy to topple your services in a matter of minutes. It boasts impressive request per second rates while respecting your system's resources. 
 
 ## Quick Start
 
