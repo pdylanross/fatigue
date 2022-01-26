@@ -58,10 +58,4 @@ jobs:
         if: ${{ success() && steps.add-and-commit.outputs.committed == 'true' }}
         with:
           registry-token: ${{ secrets.CARGO_REGISTRY_TOKEN }}
-          path: ./libfatigue
-      - uses: katyo/publish-crates@v1
-        name: Release Bin
-        if: ${{ success() && steps.add-and-commit.outputs.committed == 'true' }}
-        with:
-          registry-token: ${{ secrets.CARGO_REGISTRY_TOKEN }}
-          path: ./fatigue
+          publish-delay: 1000
