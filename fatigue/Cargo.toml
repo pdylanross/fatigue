@@ -17,7 +17,7 @@ crossterm = "0.22.1"
 figment = { version = "0.10.6", features = ["env", "yaml"] }
 humantime = "2.1.0"
 itertools = "0.10.3"
-libfatigue = { path = "../libfatigue", version = "0.2.6"}
+libfatigue = { path = "../libfatigue", version = "0.2.6" }
 num-format = "0.4.0"
 prettytable-rs = "0.8.0"
 serde = "1.0.135"
