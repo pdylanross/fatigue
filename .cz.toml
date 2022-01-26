@@ -9,7 +9,7 @@ bump_pattern = "^(feat|fix|break|chore)"
 example = "feat: this feature enable customize through config file"
 message_template = "{{change_type}}: {{message}}"
 schema = "<type>: <body>"
-schema_pattern = "(feat|fix|chore)(\\((.*)\\))?:(\\s.*)"
+schema_pattern = "(feat|fix|chore|doc|ci)(\\((.*)\\))?:(\\s.*)"
 
 [[tool.commitizen.customize.questions]]
 choices = ["feat", "fix", "doc", "ci", "break", "chore"] # short version
