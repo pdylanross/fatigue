@@ -229,16 +229,16 @@ mod tests {
     pub fn test_fatigue_builder() {
         let builder = FatigueTesterBuilder::new_from_config_string(
             r#"
-    run:
-        base_url: http://google.com
-        duration:
-            iteration:
-                iterations: 5000
-    actions:
-        - type: request
-          properties:
-            path: /
-        "#,
+run:
+  base_url: http://google.com
+  duration:
+    iteration:
+      iterations: 5000
+actions:
+  - type: request
+    properties:
+      path: /
+    "#,
         )
         .unwrap();
 

@@ -37,6 +37,7 @@ pub struct FatigueStaticContextAction {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct FatigueTesterRunInformation {
     pub base_url: String,
+    #[serde(with = "serde_yaml::with::singleton_map")]
     pub duration: RunDuration,
     #[serde(default)]
     pub concurrency: Option<usize>,
