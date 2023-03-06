@@ -22,5 +22,5 @@ num-format = "0.4.0"
 prettytable-rs = "0.9.0"
 serde = "1.0.145"
 serde_json = "1.0.93"
-thiserror = "1.0.37"
+thiserror = "1.0.39"
 tokio = { version = "1.16.1", features = ["full"] }
