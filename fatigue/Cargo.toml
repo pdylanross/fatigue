@@ -1,6 +1,6 @@
 [package]
 name = "fatigue"
-version = "0.2.7"
+version = "0.2.10"
 authors = ["Dylan Ross <pdylanross@gmail.com>"]
 edition = "2018"
 description = "an extensible load testing tool"
@@ -17,7 +17,7 @@ crossterm = "0.26.1"
 figment = { version = "0.10.8", features = ["env", "yaml"] }
 humantime = "2.1.0"
 itertools = "0.10.5"
-libfatigue = { path = "../libfatigue", version = "0.2.7"}
+libfatigue = { path = "../libfatigue", version = "0.2.10" }
 num-format = "0.4.0"
 prettytable-rs = "0.10.0"
 serde = "1.0.156"
