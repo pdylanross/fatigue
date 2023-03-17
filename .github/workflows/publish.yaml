@@ -42,7 +42,10 @@ jobs:
           push: false
       - run: cargo set-version ${{ env.REVISION }} --workspace
       - run: cargo upgrade -p libfatigue@${{ env.REVISION }}
+      # for some reason, the generated changelog from cz
+      # doesn't have the correct file permissions for git add
       - run: sudo chmod -R ugo+rwX .
+        name: fixup permissions from cz
       - uses: EndBug/add-and-commit@v9
         id: add-and-commit
         with:
