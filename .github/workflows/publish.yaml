@@ -41,11 +41,12 @@ jobs:
           commit: false
           push: false
       - name: should_publish
-        run: >
+        shell: bash
+        run: |
           cargo build --bin fatigue
           
           OLD_VERSION="$(./target/debug/fatigue --version)"
-          if [[ "$OLD_VERSION" == "fatigue ${{ env.REVISION}}" ]]; then 
+          if [[ "$OLD_VERSION" == "fatigue ${{ env.REVISION }}" ]]; then 
             OUTPUT="false"
           else
             OUTPUT="true"
