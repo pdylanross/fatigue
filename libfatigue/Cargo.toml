@@ -12,7 +12,7 @@ license = "Apache-2.0"
 
 [dependencies]
 async-trait = "0.1.57"
-csv = "1.1.6"
+csv = "1.2.1"
 dashmap = "5.2.0"
 futures = "0.3.26"
 hdrhistogram = "7.5.2"
