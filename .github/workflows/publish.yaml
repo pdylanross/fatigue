@@ -41,7 +41,7 @@ jobs:
           commit: false
           push: false
       - run: cargo set-version ${{ env.REVISION }} --workspace
-      - run: cargo upgrade -p libfatigue@${{ env.REVISION }} --workspace
+      - run: cargo upgrade -p libfatigue@${{ env.REVISION }}
       - uses: EndBug/add-and-commit@v9
         id: add-and-commit
         with:
