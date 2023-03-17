@@ -45,9 +45,6 @@ jobs:
         with:
           toolchain: stable
       - uses: Swatinem/rust-cache@v2
-        with:
-          prefix-key: ubuntu-latest
-          shared-key: "pdylanross/fatigue"
       - uses: actions-rs/install@v0.1
         with:
           crate: cargo-sort
@@ -63,9 +60,6 @@ jobs:
           toolchain: stable
           components: clippy
       - uses: Swatinem/rust-cache@v2
-        with:
-          prefix-key: ubuntu-latest
-          shared-key: "pdylanross/fatigue"
       - uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

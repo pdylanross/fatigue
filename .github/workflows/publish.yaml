@@ -42,7 +42,6 @@ jobs:
       - run: cargo upgrade libfatigue@${{ env.REVISION }} --workspace
       - run: sudo chmod -R ugo+rwX .
       - name: Release
-        if: ${{ success() && steps.add-and-commit.outputs.committed == 'true' }}
         uses: softprops/action-gh-release@v1
         with:
           body_path: "body.md"
@@ -51,7 +50,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: katyo/publish-crates@v1
         name: Release lib
-        if: ${{ success() && steps.add-and-commit.outputs.committed == 'true' }}
         with:
           registry-token: ${{ secrets.CARGO_REGISTRY_TOKEN }}
           publish-delay: 1000
