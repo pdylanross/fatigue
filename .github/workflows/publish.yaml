@@ -30,16 +30,24 @@ jobs:
       - uses: actions-rs/install@v0.1
         with:
           crate: cargo-edit
-          version: 0.8.0
+          version: 0.11.9
           use-tool-cache: true
       - name: Create bump and changelog
         id: cz
-        uses: commitizen-tools/commitizen-action@master
+        uses: commitizen-tools/commitizen-action@0.18.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           changelog_increment_filename: body.md
+          commit: false
+          push: false
       - run: cargo set-version ${{ env.REVISION }} --workspace
       - run: cargo upgrade libfatigue@${{ env.REVISION }} --workspace
+      - uses: EndBug/add-and-commit@v9
+        id: add-and-commit
+        with:
+          message: "[skip ci] release: ${{ env.REVISION }}"
+          push: true
+          tag: ${{ env.REVISION }}
       - run: sudo chmod -R ugo+rwX .
       - name: Release
         uses: softprops/action-gh-release@v1
