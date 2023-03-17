@@ -11,7 +11,7 @@ license = "Apache-2.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = { version = "2.34.0", features = ["suggestions", "color", "wrap_help"] }
+clap = { version = "4.1.9", features = ["derive"] }
 console = "0.15.5"
 crossterm = "0.26.1"
 figment = { version = "0.10.8", features = ["env", "yaml"] }

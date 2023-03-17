@@ -42,13 +42,13 @@ jobs:
           push: false
       - run: cargo set-version ${{ env.REVISION }} --workspace
       - run: cargo upgrade -p libfatigue@${{ env.REVISION }}
+      - run: sudo chmod -R ugo+rwX .
       - uses: EndBug/add-and-commit@v9
         id: add-and-commit
         with:
           message: "[skip ci] release: ${{ env.REVISION }}"
           push: true
           tag: ${{ env.REVISION }}
-      - run: sudo chmod -R ugo+rwX .
       - name: Release
         uses: softprops/action-gh-release@v1
         with:

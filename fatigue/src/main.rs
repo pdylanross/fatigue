@@ -1,12 +1,7 @@
 #[macro_use]
 extern crate thiserror;
-#[macro_use]
-extern crate clap;
-#[macro_use]
-extern crate prettytable;
 
 use crate::output::{get_output_formatter, OutputFormatter};
-use clap::{App, Arg};
 use figment::providers::{Env, Format, Yaml};
 use figment::Figment;
 use libfatigue::config::types::FatigueTesterConfig;
@@ -17,19 +12,18 @@ use libfatigue::{
     TestRunSettings, TestRunWatchSettings,
 };
 use std::env::set_current_dir;
-use std::path::Path;
+use std::path::{PathBuf};
 use std::process::exit;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use tokio::join;
 use tokio::sync::watch;
+use clap::Parser;
 
 mod output;
 
 #[derive(Error, Debug)]
 enum AppError {
-    #[error("missing arg `{0}`")]
-    MissingArg(&'static str),
     #[error("error setting up fatigue tester: `{0}`")]
     FatigueBuilder(#[from] FatigueTesterBuilderError),
     #[error("error setting up actions: `{0}`")]
@@ -42,32 +36,16 @@ enum AppError {
     FigmentError(#[from] figment::Error),
 }
 
-fn init() -> Result<(), AppError> {
-    Ok(())
+#[derive(clap::Parser)]
+#[command(author, version, about)]
+struct Args {
+    #[arg(short, long, value_name="PLAN_FILE")]
+    pub plan: PathBuf
 }
 
-fn build_command<'a, 'b>() -> App<'a, 'b> {
-    app_from_crate!().arg(
-        Arg::with_name("plan")
-            .short("p")
-            .long("plan")
-            .value_name("FILE")
-            .help("the test plan to execute")
-            .takes_value(true)
-            .required(true),
-    )
-}
-
-async fn execute_command<'a, 'b>(app: App<'a, 'b>) -> Result<(), AppError> {
-    let matches = app.get_matches();
-
-    let plan_file = match matches.value_of("plan") {
-        None => return Err(AppError::MissingArg("plan")),
-        Some(val) => Path::new(val),
-    };
-
+async fn execute_command(args: Args) -> Result<(), AppError> {
     let config: FatigueTesterConfig = Figment::new()
-        .merge(Yaml::file(plan_file))
+        .merge(Yaml::file(&args.plan))
         .merge(Env::prefixed("fatigue."))
         .extract()?;
 
@@ -91,7 +69,7 @@ async fn execute_command<'a, 'b>(app: App<'a, 'b>) -> Result<(), AppError> {
     };
 
     // any file path based operations are done from the perspective of the config file
-    let base_dir = plan_file
+    let base_dir = args.plan
         .parent()
         .expect("could not load parent dir of the config file");
     set_current_dir(base_dir).expect("could not change cwd to the directory of the config file");
@@ -142,7 +120,6 @@ async fn run_tester(
 
 #[tokio::main]
 async fn main() -> Result<(), AppError> {
-    init()?;
-    let cmd = build_command();
-    execute_command(cmd).await
+    let args = Args::parse();
+    execute_command(args).await
 }
