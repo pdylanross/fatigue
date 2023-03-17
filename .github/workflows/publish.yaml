@@ -23,7 +23,10 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
+        with:
+          prefix-key: ubuntu-latest
+          shared-key: "pdylanross/fatigue"
       - uses: actions-rs/install@v0.1
         with:
           crate: cargo-edit
@@ -35,16 +38,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           changelog_increment_filename: body.md
-          branch: main
-          commit: false
       - run: cargo set-version ${{ env.REVISION }} --workspace
       - run: cargo upgrade libfatigue@${{ env.REVISION }} --workspace
       - run: sudo chmod -R ugo+rwX .
-      - uses: EndBug/add-and-commit@v7
-        id: add-and-commit
-        with:
-          message: "[skip ci] release: ${{ env.REVISION }}"
-          push: true
       - name: Release
         if: ${{ success() && steps.add-and-commit.outputs.committed == 'true' }}
         uses: softprops/action-gh-release@v1

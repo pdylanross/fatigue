@@ -21,7 +21,10 @@ jobs:
         toolchain: [stable]
     steps:
       - uses: actions/checkout@v2
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
+        with:
+          prefix-key: ${{ matrix.os }}
+          shared-key: "pdylanross/fatigue"
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{matrix.toolchain}}
@@ -41,7 +44,10 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
+        with:
+          prefix-key: ubuntu-latest
+          shared-key: "pdylanross/fatigue"
       - uses: actions-rs/install@v0.1
         with:
           crate: cargo-sort
@@ -56,7 +62,10 @@ jobs:
         with:
           toolchain: stable
           components: clippy
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
+        with:
+          prefix-key: ubuntu-latest
+          shared-key: "pdylanross/fatigue"
       - uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
