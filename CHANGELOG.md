@@ -1,3 +1,68 @@
+## 0.2.11 (2023-03-17)
+
+
+- fix(ci): kodiak config to fix dependabot PRs
+- chore: bump num-format from 0.4.0 to 0.4.4 (#108)
+- Bumps [num-format](https://github.com/bcmyers/num-format) from 0.4.0 to 0.4.4.
+<details>
+<summary>Changelog</summary>
+<p><em>Sourced from <a href="https://github.com/bcmyers/num-format/blob/main/CHANGELOG.md">num-format's changelog</a>.</em></p>
+<blockquote>
+<h1>0.4.3 (2022-10-09)</h1>
+<ul>
+<li>Add github actions CI</li>
+<li>Fix a few clippy lints</li>
+</ul>
+<h1>0.4.2 (2022-10-09)</h1>
+<ul>
+<li>Bump 3rd party dependencies</li>
+<li>Update <a href="https://github.com/unicode-cldr/cldr-numbers-full">cldr-numbers-full</a>
+git submodule to commit <a href="https://github.com/unicode-cldr/cldr-numbers-full/commit/b52a87048985d3052f12d30d05cfe5423ad92709">b52a87048985d3052f12d30d05cfe5423ad92709</a></li>
+<li><code>Locale::from_str</code> now supports underscore-delimited locales, e.g. &quot;de_DE&quot;,
+in addition to previously supported dash-delimiated locales, e.g &quot;de-DE&quot;</li>
+</ul>
+</blockquote>
+</details>
+<details>
+<summary>Commits</summary>
+<ul>
+<li><a href="https://github.com/bcmyers/num-format/commit/c2173715e17a48de2e0b453972715f78a8a7594b"><code>c217371</code></a> [num-format] 0.4.4</li>
+<li><a href="https://github.com/bcmyers/num-format/commit/a2bdd9b8ce65c49e3b1d9496d29914995dcbfef8"><code>a2bdd9b</code></a> [num-format-windows] 0.4.4</li>
+<li><a href="https://github.com/bcmyers/num-format/commit/fc443eb35450cbd7eb702bf8c6f86f71ea0dfebe"><code>fc443eb</code></a> [num-format-windows] Bump bindgen to 0.63.0</li>
+<li><a href="https://github.com/bcmyers/num-format/commit/64e977605c1241dfdd397fa79702eb653f74bf1e"><code>64e9776</code></a> [num-format] 0.4.3</li>
+<li><a href="https://github.com/bcmyers/num-format/commit/133d20cce170264c38d1f55eba547b4a3eed6af6"><code>133d20c</code></a> [num-format] Add justfile to replace scripts</li>
+<li><a href="https://github.com/bcmyers/num-format/commit/91c783bc6c3cc14f3f192a1f351e8aad4460db41"><code>91c783b</code></a> [num-format] Add CI</li>
+<li><a href="https://github.com/bcmyers/num-format/commit/b4e8067262f6dc66197469255705c29ae6ba2434"><code>b4e8067</code></a> [num-format-dev] Remove automatic running of rustfmt</li>
+<li><a href="https://github.com/bcmyers/num-format/commit/829c5996e547111155c9548a102761f0f2cf7bc6"><code>829c599</code></a> [num-format] Update min rust version in README</li>
+<li><a href="https://github.com/bcmyers/num-format/commit/f131d56b5aeee4f8892a8989454accef174c095c"><code>f131d56</code></a> [num-format] Remove refs to travis-ci.org, which no longer functions</li>
+<li><a href="https://github.com/bcmyers/num-format/commit/51f2ff10a05dd94a716b8a5c8e772b38d80ae79f"><code>51f2ff1</code></a> [num-format] 0.4.2</li>
+<li>Additional commits viewable in <a href="https://github.com/bcmyers/num-format/compare/v0.4.0...v0.4.4">compare view</a></li>
+</ul>
+</details>
+<br />
+- 
+[![Dependabot compatibility score](https://dependabot-badges.githubapp.com/badges/compatibility_score?dependency-name=num-format&package-manager=cargo&previous-version=0.4.0&new-version=0.4.4)](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)
+- Dependabot will resolve any conflicts with this PR as long as you don't alter it yourself. You can also trigger a rebase manually by commenting `@dependabot rebase`.
+- [//]: # (dependabot-automerge-start)
+[//]: # (dependabot-automerge-end)
+- ---
+- <details>
+<summary>Dependabot commands and options</summary>
+<br />
+- You can trigger Dependabot actions by commenting on this PR:
+- `@dependabot rebase` will rebase this PR
+- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it
+- `@dependabot merge` will merge this PR after your CI passes on it
+- `@dependabot squash and merge` will squash and merge this PR after your CI passes on it
+- `@dependabot cancel merge` will cancel a previously requested merge and block automerging
+- `@dependabot reopen` will reopen this PR if it is closed
+- `@dependabot close` will close this PR and stop Dependabot recreating it. You can achieve the same result by closing it manually
+- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)
+- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)
+- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)
+- 
+</details>
+
 ## 0.2.10 (2023-03-17)
 
 
