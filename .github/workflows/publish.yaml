@@ -40,7 +40,7 @@ jobs:
           changelog_increment_filename: body.md
           commit: false
           push: false
-      - name: should_publish
+      - id: should_publish
         shell: bash
         run: |
           set -ex
@@ -54,7 +54,7 @@ jobs:
             OUTPUT="true"
           fi
           
-          echo "update=$OUTPUT" >> $GITHUB_OUTPUT
+          echo "update=$OUTPUT\n" >> $GITHUB_OUTPUT
       - run: cargo set-version ${{ env.REVISION }} --workspace
         if: steps.should_publish.outputs.update == 'true'
       - run: cargo upgrade -p libfatigue@${{ env.REVISION }}
