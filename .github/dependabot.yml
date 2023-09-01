@@ -11,5 +11,8 @@ updates:
       prefix: "chore"
   - package-ecosystem: "github-actions"
     directory: "/"
+    labels:
+      - "dependencies"
+      - "automerge"
     schedule:
       interval: "daily"
