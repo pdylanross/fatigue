@@ -1,3 +1,9 @@
+## 0.2.13 (2023-09-01)
+
+
+- fix: missed json output formatter file
+- nbd, its not used anyways
+
 ## 0.2.12 (2023-09-01)
 
 
