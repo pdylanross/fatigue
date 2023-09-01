@@ -2,7 +2,7 @@
 name = "fatigue"
 version = "0.2.11"
 authors = ["Dylan Ross <pdylanross@gmail.com>"]
-edition = "2018"
+edition = "2021"
 description = "an extensible load testing tool"
 readme = "README.md"
 homepage = "https://github.com/pdylanross/fatigue"
@@ -23,4 +23,4 @@ prettytable-rs = "0.10.0"
 serde = "1.0.188"
 serde_json = "1.0.105"
 thiserror = "1.0.47"
-tokio = { version = "1.20.5", features = ["full"] }
+tokio = { version = "1.32.0", features = ["full"] }

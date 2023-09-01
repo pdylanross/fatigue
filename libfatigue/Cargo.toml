@@ -3,7 +3,7 @@ name = "libfatigue"
 version = "0.2.11"
 authors = ["Dylan Ross <pdylanross@gmail.com>"]
 description = "an extensible load testing library"
-edition = "2018"
+edition = "2021"
 readme = "README.md"
 homepage = "https://github.com/pdylanross/fatigue"
 repository = "https://github.com/pdylanross/fatigue"
@@ -25,5 +25,5 @@ serde = { version = "1.0.188", features = ["derive"] }
 serde_json = "1.0.105"
 serde_yaml = "0.9.25"
 thiserror = "1.0.47"
-tokio = { version = "1.20.5", features = ["full"] }
+tokio = { version = "1.32.0", features = ["full"] }
 url = "2.4.1"
