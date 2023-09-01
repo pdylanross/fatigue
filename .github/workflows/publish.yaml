@@ -77,7 +77,7 @@ jobs:
           tag_name: ${{ env.REVISION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: katyo/publish-crates@v1
+      - uses: katyo/publish-crates@v2
         if: steps.should_publish.outputs.update == 'true'
         name: Release lib
         with:
