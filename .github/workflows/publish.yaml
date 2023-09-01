@@ -43,6 +43,8 @@ jobs:
       - name: should_publish
         shell: bash
         run: |
+          set -ex
+          
           cargo build --bin fatigue
           
           OLD_VERSION="$(./target/debug/fatigue --version)"
