@@ -73,7 +73,7 @@ jobs:
           tag: ${{ env.REVISION }}
       - name: Release
         if: steps.should_publish.outputs.update == 'true'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           body_path: "body.md"
           tag_name: ${{ env.REVISION }}
