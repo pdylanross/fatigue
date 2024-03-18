@@ -14,7 +14,7 @@ license = "Apache-2.0"
 clap = { version = "4.1.9", features = ["derive"] }
 console = "0.15.8"
 crossterm = "0.27.0"
-figment = { version = "0.10.14", features = ["env", "yaml"] }
+figment = { version = "0.10.15", features = ["env", "yaml"] }
 humantime = "2.1.0"
 itertools = "0.12.1"
 libfatigue = { path = "../libfatigue", version = "0.2.15" }
