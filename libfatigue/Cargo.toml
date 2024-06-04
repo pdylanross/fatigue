@@ -17,7 +17,7 @@ dashmap = "5.2.0"
 futures = "0.3.30"
 hdrhistogram = "7.5.4"
 humantime-serde = "1.1.1"
-liquid = "0.26.4"
+liquid = "0.26.5"
 num_cpus = "1.16.0"
 petname = "1.1.2"
 reqwest = { version = "0.12.4", features = ["json"] }
