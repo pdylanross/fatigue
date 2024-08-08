@@ -9,6 +9,6 @@ version = "0.2.15"
 [dependencies]
 rand = "0.8.5"
 rocket = {version = "0.5.1", features = ["json"]}
-serde = {version = "1.0.204", features = ["derive"]}
+serde = {version = "1.0.205", features = ["derive"]}
 serde_json = "1.0.122"
 uuid = {version = "1.10.0", features = ["v4"]}
