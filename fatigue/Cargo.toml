@@ -12,7 +12,7 @@ license = "Apache-2.0"
 
 [dependencies]
 clap = { version = "4.1.9", features = ["derive"] }
-console = "0.15.8"
+console = "0.15.10"
 crossterm = "0.28.1"
 figment = { version = "0.10.19", features = ["env", "yaml"] }
 humantime = "2.1.0"
