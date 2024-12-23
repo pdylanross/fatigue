@@ -21,6 +21,6 @@ libfatigue = { path = "../libfatigue", version = "0.2.15" }
 num-format = "0.4.4"
 prettytable-rs = "0.10.0"
 serde = "1.0.216"
-serde_json = "1.0.133"
+serde_json = "1.0.134"
 thiserror = "2.0.8"
 tokio = { version = "1.42.0", features = ["full"] }
