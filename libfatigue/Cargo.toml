@@ -1,6 +1,6 @@
 [package]
 name = "libfatigue"
-version = "0.2.16"
+version = "0.2.17"
 authors = ["Dylan Ross <pdylanross@gmail.com>"]
 description = "an extensible load testing library"
 edition = "2021"
