@@ -15,7 +15,7 @@ clap = { version = "4.1.9", features = ["derive"] }
 console = "0.15.11"
 crossterm = "0.28.1"
 figment = { version = "0.10.19", features = ["env", "yaml"] }
-humantime = "2.1.0"
+humantime = "2.2.0"
 itertools = "0.14.0"
 libfatigue = { path = "../libfatigue", version = "0.2.17" }
 num-format = "0.4.4"
