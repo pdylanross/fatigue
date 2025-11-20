@@ -34,7 +34,7 @@ jobs:
           use-tool-cache: true
       - name: Create bump and changelog
         id: cz
-        uses: commitizen-tools/commitizen-action@0.25.0
+        uses: commitizen-tools/commitizen-action@0.26.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           changelog_increment_filename: body.md
