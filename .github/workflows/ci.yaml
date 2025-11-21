@@ -20,7 +20,7 @@ jobs:
         os: [windows-latest, ubuntu-latest]
         toolchain: [stable]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: Swatinem/rust-cache@v2
         with:
           prefix-key: ${{ matrix.os }}
@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Cargo Sort check
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Cargo Clippy Check
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
