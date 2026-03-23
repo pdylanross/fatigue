@@ -64,7 +64,7 @@ jobs:
       - run: sudo chmod -R ugo+rwX .
         name: fixup permissions from cz
         if: steps.should_publish.outputs.update == 'true'
-      - uses: EndBug/add-and-commit@v9
+      - uses: EndBug/add-and-commit@v10
         if: steps.should_publish.outputs.update == 'true'
         id: add-and-commit
         with:
