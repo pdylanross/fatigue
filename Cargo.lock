@@ -639,7 +639,7 @@ dependencies = [
 
 [[package]]
 name = "fatigue"
-version = "0.2.19"
+version = "0.2.20"
 dependencies = [
  "clap 4.1.9",
  "console",
@@ -1404,7 +1404,7 @@ checksum = "d750af042f7ef4f724306de029d18836c26c1765a54a6a3f094cbd23a7267ffa"
 
 [[package]]
 name = "libfatigue"
-version = "0.2.19"
+version = "0.2.20"
 dependencies = [
  "async-trait",
  "csv",
@@ -2656,7 +2656,7 @@ dependencies = [
 
 [[package]]
 name = "test-api"
-version = "0.2.19"
+version = "0.2.20"
 dependencies = [
  "rand 0.9.4",
  "rocket",
