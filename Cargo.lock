@@ -2665,7 +2665,7 @@ dependencies = [
 name = "test-api"
 version = "0.2.21"
 dependencies = [
- "rand 0.9.4",
+ "rand 0.10.1",
  "rocket",
  "serde",
  "serde_json",
